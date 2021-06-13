@@ -1,5 +1,5 @@
-import React from 'react';
-import { OrbitControls } from '@react-three/drei';
+import React, { useState, useMemo } from 'react';
+import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import './App.css';
 
@@ -8,6 +8,50 @@ function App() {
   const boxSize = .4;
   const margin = 5;
   const boxItems: JSX.Element[] = [];
+  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 8])
+
+  const handleMovement = (direction:string) => {
+    if (direction === 'x') setCameraPosition(
+      [
+        cameraPosition[0],
+        cameraPosition[1],
+        cameraPosition[2] - 1
+      ]
+    )
+
+    if (direction === '-x') setCameraPosition(
+      [
+        cameraPosition[0],
+        cameraPosition[1],
+        cameraPosition[2] + 1
+      ]
+    )
+
+    if (direction === '-y') setCameraPosition(
+      [
+        cameraPosition[0] - 1,
+        cameraPosition[1],
+        cameraPosition[2]
+      ]
+    )
+
+    if (direction === 'y') setCameraPosition(
+      [
+        cameraPosition[0] + 1,
+        cameraPosition[1],
+        cameraPosition[2]
+      ]
+    )
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "w") handleMovement('x');
+    if (event.key === "a") handleMovement('-y');
+    if (event.key === "s") handleMovement('-x');
+    if (event.key === "d") handleMovement('y');
+
+    return;
+  }
 
   for (let i = 0; i < boxCount; i++) {
     boxItems.push(
@@ -17,8 +61,14 @@ function App() {
       </mesh>)
   }
 
+  const boxes = useMemo(() => boxItems, [])
+
   return (
-    <div className="App">
+    <div
+      className="App"
+      onKeyPress={(e: React.KeyboardEvent) => handleKeyDown(e)}
+      tabIndex={0}
+    >
       <Canvas
         style={{
           width: '100vw',
@@ -29,15 +79,15 @@ function App() {
         <ambientLight intensity={1} />
         <pointLight
           castShadow
-          position={[2* margin, 2 * margin, 3 * margin]}
+          position={[2 * margin, 2 * margin, 3 * margin]}
           intensity={1}
         />
-        {boxItems}
+        {boxes}
         <mesh rotation={[- Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
-          <planeBufferGeometry attach="geometry" args={[100,100]} />
+          <planeBufferGeometry attach="geometry" args={[100, 100]} />
           <meshBasicMaterial attach="material" color="hotpink" />
         </mesh>
-        <OrbitControls />
+        <PerspectiveCamera makeDefault position={cameraPosition} />
       </Canvas>
     </div>
   );
