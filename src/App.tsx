@@ -1,15 +1,20 @@
 import React from 'react';
-import Box from './comps/Box';
-// import Plane from './comps/Plane';
-import { OrbitControls, Plane } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import './App.css';
 
 function App() {
-  const boxItems:JSX.Element[] = [];
-  
-  for (let i = 0; i < 100; i++) {
-    boxItems.push(<Box position={[Math.random() * 20, Math.random() * 20, Math.random() * 20]} />)
+  const boxCount = 70;
+  const boxSize = .4;
+  const margin = 5;
+  const boxItems: JSX.Element[] = [];
+
+  for (let i = 0; i < boxCount; i++) {
+    boxItems.push(
+      <mesh position={[(Math.random() - 0.5) * margin, Math.random() * margin, (Math.random() - 0.5) * margin]} castShadow receiveShadow>
+        <boxBufferGeometry attach="geometry" args={[boxSize, boxSize, boxSize]} />
+        <meshStandardMaterial attach="material" color="lightblue" roughness={0.5} metalness={0.1} />
+      </mesh>)
   }
 
   return (
@@ -19,13 +24,19 @@ function App() {
           width: '100vw',
           height: '100vh',
         }}
+        shadows
       >
-        <ambientLight />
-        <pointLight position={[10, 10, 10]} />
-        {boxItems}        
-        <Plane args={[100,100]} rotation={[- Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
+        <ambientLight intensity={1} />
+        <pointLight
+          castShadow
+          position={[2* margin, 2 * margin, 3 * margin]}
+          intensity={1}
+        />
+        {boxItems}
+        <mesh rotation={[- Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
+          <planeBufferGeometry attach="geometry" args={[100,100]} />
           <meshBasicMaterial attach="material" color="hotpink" />
-        </Plane>
+        </mesh>
         <OrbitControls />
       </Canvas>
     </div>
