@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { PerspectiveCamera } from '@react-three/drei';
+import Camera from './comps/Camera';
 import { Canvas } from '@react-three/fiber';
 import './App.css';
 
@@ -7,6 +7,7 @@ function App() {
   const boxCount = 70;
   const boxSize = .4;
   const margin = 5;
+  const speed = .3;
   const boxItems: JSX.Element[] = [];
   const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 8])
 
@@ -15,7 +16,7 @@ function App() {
       [
         cameraPosition[0],
         cameraPosition[1],
-        cameraPosition[2] - 1
+        cameraPosition[2] - speed
       ]
     )
 
@@ -23,13 +24,13 @@ function App() {
       [
         cameraPosition[0],
         cameraPosition[1],
-        cameraPosition[2] + 1
+        cameraPosition[2] + speed
       ]
     )
 
     if (direction === '-y') setCameraPosition(
       [
-        cameraPosition[0] - 1,
+        cameraPosition[0] - speed,
         cameraPosition[1],
         cameraPosition[2]
       ]
@@ -37,7 +38,7 @@ function App() {
 
     if (direction === 'y') setCameraPosition(
       [
-        cameraPosition[0] + 1,
+        cameraPosition[0] + speed,
         cameraPosition[1],
         cameraPosition[2]
       ]
@@ -87,7 +88,7 @@ function App() {
           <planeBufferGeometry attach="geometry" args={[100, 100]} />
           <meshBasicMaterial attach="material" color="hotpink" />
         </mesh>
-        <PerspectiveCamera makeDefault position={cameraPosition} />
+        <Camera cameraPosition={cameraPosition} />
       </Canvas>
     </div>
   );
