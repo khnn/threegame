@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls"
-
+import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
+import useKeyboardControls from "../hooks/use-keyboard-controls";
 
 const Controls: React.FC<{props?:any}> = ({props}, ref) => {
   const { camera, gl } = useThree();
   const [controls] = useState(() => new PointerLockControls(camera, gl.domElement));
   const speed = 0.01;
+  let frontMove = 0
+  let sideMove = 0
 
+  const { forward, backward, left, right } = useKeyboardControls()
+  
   useFrame((state) => {
-    // controls.moveForward(speed)
-    // controls.moveRight(speed)
+    frontMove = Number(forward) - Number(backward)
+    sideMove = Number(right) - Number(left)
+
+    if (frontMove) controls.moveForward(frontMove * speed)
+    if (sideMove) controls.moveRight(sideMove * speed)
   })
 
   useEffect(() => {
@@ -18,7 +25,7 @@ const Controls: React.FC<{props?:any}> = ({props}, ref) => {
       if (e.repeat) {
         return
       }
-      if (e.key === " ") {
+      if (e.key === "Enter") {
         controls.isLocked ? controls.unlock() : controls.lock()
       }
     }
