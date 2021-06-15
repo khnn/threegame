@@ -8,10 +8,11 @@ import { PointerLockControls } from "three/examples/jsm/controls/PointerLockCont
 const Controls: React.FC = () => {
   const { camera, gl } = useThree();
   const controls: PointerLockControls = new PointerLockControls(camera, gl.domElement)
+  const speed = 0.01;
 
   useFrame((state) => {
-    // controls.moveForward(1)
-    // controls.moveRight(1)
+    // controls.moveForward(speed)
+    // controls.moveRight(speed)
   })
 
   return controls ? <primitive dispose={undefined} object={controls} /> : null
