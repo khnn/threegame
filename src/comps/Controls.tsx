@@ -1,13 +1,11 @@
-import React from 'react';
-// import { PerspectiveCamera } from '@react-three/drei';
+import React, { useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls"
-// import useEffectfulState from "../use-effectful-state"
 
 
-const Controls: React.FC = () => {
+const Controls: React.FC<{props?:any}> = ({props}, ref) => {
   const { camera, gl } = useThree();
-  const controls: PointerLockControls = new PointerLockControls(camera, gl.domElement)
+  const [controls] = useState(() => new PointerLockControls(camera, gl.domElement));
   const speed = 0.01;
 
   useFrame((state) => {
@@ -15,7 +13,20 @@ const Controls: React.FC = () => {
     // controls.moveRight(speed)
   })
 
-  return controls ? <primitive dispose={undefined} object={controls} /> : null
+  useEffect(() => {
+    const handler = (e:KeyboardEvent) => {
+      if (e.repeat) {
+        return
+      }
+      if (e.key === " ") {
+        controls.isLocked ? controls.unlock() : controls.lock()
+      }
+    }
+    document.addEventListener("keydown", handler)
+    return () => document.removeEventListener("keydown", handler)
+  }, [controls])
+
+  return controls ? <primitive dispose={undefined} object={controls} {...props} /> : null
 }
 
 export default Controls;
