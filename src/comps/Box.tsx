@@ -1,13 +1,22 @@
+import { useState, useMemo } from "react";
 
-function Box(props: any) {
+const Box: React.FC = () => {
+  const [hit, setHit] = useState(false);
+  const boxSize = .4;
+  const margin = 5;
+  const position:[number, number, number] = useMemo(() => [(Math.random() - 0.5) * margin, Math.random() * margin, (Math.random() - 0.5) * margin],[])
+  
   return (
     <mesh
-      {...props}
+      position={position}
+      onClick={( )=> setHit(true)}
+      castShadow
+      receiveShadow
     >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial />
+      <boxBufferGeometry attach="geometry" args={[boxSize, boxSize, boxSize]} />
+      <meshStandardMaterial attach="material" color={hit ? "hotpink" : "lightblue"} roughness={0.5} metalness={0.1} />
     </mesh>
   )
 }
 
-export default Box
+export default Box;

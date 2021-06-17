@@ -1,23 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Controls from './comps/Controls';
-import { Canvas, useFrame } from '@react-three/fiber';
+import Box from './comps/Box';
+import { Canvas } from '@react-three/fiber';
 import './App.css';
 
 function App() {
   const boxCount = 70;
-  const boxSize = .4;
-  const margin = 5;
   const boxItems: JSX.Element[] = [];
 
   for (let i = 0; i < boxCount; i++) {
     boxItems.push(
-      <mesh position={[(Math.random() - 0.5) * margin, Math.random() * margin, (Math.random() - 0.5) * margin]} castShadow receiveShadow>
-        <boxBufferGeometry attach="geometry" args={[boxSize, boxSize, boxSize]} />
-        <meshStandardMaterial attach="material" color="lightblue" roughness={0.5} metalness={0.1} />
-      </mesh>)
+      <Box />
+    )
   }
 
-  const boxes = useMemo(() => boxItems, [])
+  // const boxes = useMemo(() => boxItems, [])
 
   return (
     <div className="App">
@@ -25,22 +22,35 @@ function App() {
         style={{
           width: '100vw',
           height: '100vh',
+          position: 'relative',
         }}
         shadows
       >
         <ambientLight intensity={1} />
         <pointLight
           castShadow
-          position={[2 * margin, 2 * margin, 3 * margin]}
+          position={[2, 2, 3]}
           intensity={1}
         />
-        {boxes}
+        {boxItems}
         <mesh rotation={[- Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
           <planeBufferGeometry attach="geometry" args={[100, 100]} />
           <meshBasicMaterial attach="material" color="hotpink" />
         </mesh>
         <Controls />
       </Canvas>
+      <div
+        style={{
+          background: 'red',
+          width: '0.5rem',
+          height: '0.5rem',
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          borderRadius: '100%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      ></div>
     </div>
   );
 }
