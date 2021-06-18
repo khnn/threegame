@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 import Controls from './comps/Controls';
 import Box from './comps/Box';
+import Plane from './comps/Plane';
 import { Canvas } from '@react-three/fiber';
+import { Physics } from '@react-three/cannon';
 import './App.css';
 
 function App() {
-  const boxCount = 70;
+  const boxCount = 20;
   const boxItems: JSX.Element[] = [];
 
   for (let i = 0; i < boxCount; i++) {
@@ -13,8 +15,6 @@ function App() {
       <Box />
     )
   }
-
-  // const boxes = useMemo(() => boxItems, [])
 
   return (
     <div className="App">
@@ -26,18 +26,17 @@ function App() {
         }}
         shadows
       >
-        <ambientLight intensity={1} />
-        <pointLight
-          castShadow
-          position={[2, 2, 3]}
-          intensity={1}
-        />
-        {boxItems}
-        <mesh rotation={[- Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
-          <planeBufferGeometry attach="geometry" args={[100, 100]} />
-          <meshBasicMaterial attach="material" color="hotpink" />
-        </mesh>
-        <Controls />
+        <Physics>
+          <ambientLight intensity={1} />
+          <pointLight
+            castShadow
+            position={[2, 2, 3]}
+            intensity={1}
+          />
+          {boxItems}
+          <Plane />
+          <Controls />
+        </Physics>
       </Canvas>
       <div
         style={{
