@@ -26,7 +26,9 @@ function App() {
         }}
         shadows
       >
-        <Physics>
+        <Physics
+          gravity={[0, -4, 0]}
+        >
           <ambientLight intensity={1} />
           <pointLight
             castShadow
