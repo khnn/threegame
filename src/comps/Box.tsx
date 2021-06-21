@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useBox } from '@react-three/cannon';
+import { config } from '../assets/config';
 
 const Box: React.FC = () => {
   const [hit, setHit] = useState(false);
@@ -17,7 +18,7 @@ const Box: React.FC = () => {
       ref={ref}
     >
       <boxBufferGeometry attach="geometry" args={args} />
-      <meshStandardMaterial attach="material" color={hit ? "hotpink" : "lightblue"} roughness={0.5} metalness={0.1} />
+      <meshStandardMaterial attach="material" color={hit ? "hotpink" : config.boxColor} roughness={0.5} metalness={0.1} />
     </mesh>
   )
 }
