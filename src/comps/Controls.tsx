@@ -4,6 +4,8 @@ import { PointerLockControls } from "three/examples/jsm/controls/PointerLockCont
 import useKeyboardControls from "../hooks/use-keyboard-controls";
 import { Raycaster, Vector3, Mesh } from 'three';
 import { isBox } from '../assets/helpers';
+import { userSettings } from '../assets/config';
+
 
 interface ControlsProps {
   setActiveBoxes: any,
@@ -13,9 +15,9 @@ interface ControlsProps {
 const Controls: React.FC<ControlsProps> = (props: ControlsProps, ref) => {
   const { camera, gl, scene } = useThree();
   const { setActiveBoxes, activeBoxes } = props;
+  const { speed } = userSettings;
   const [controls] = useState(() => new PointerLockControls(camera, gl.domElement));
   const [raycaster, setRaycaster] = useState<Raycaster|undefined>(undefined);
-  const speed = 0.01;
   let frontMove = 0
   let sideMove = 0
   let cameraDirection:Vector3;

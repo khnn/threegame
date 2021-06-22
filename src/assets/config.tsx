@@ -6,6 +6,7 @@ export const config = {
   boxActiveItems: [],
 }
 
-export const boxItems = {
+export const userSettings = {
+  speed: 0.05,
 }
 
