@@ -1,18 +1,24 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Controls from './comps/Controls';
 import Box from './comps/Box';
 import Plane from './comps/Plane';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import './App.css';
+import { config } from './assets/config';
+import { useState } from 'react';
 
 function App() {
-  const boxCount = 20;
-  const boxItems: JSX.Element[] = [];
-
+  const { boxCount, boxActiveItems } = config;
+  const [activeBoxes, setActiveBoxes] = useState<number[]>(boxActiveItems)
+  const boxItems:{id: number, active: boolean}[] = [];
+  
   for (let i = 0; i < boxCount; i++) {
     boxItems.push(
-      <Box />
+      {
+        id: i,
+        active: activeBoxes.includes(i)
+      }
     )
   }
 
@@ -35,9 +41,9 @@ function App() {
             position={[2, 2, 3]}
             intensity={1}
           />
-          {boxItems}
+          {boxItems.map((b) => <Box active={b.active} userData={{ id: b.id }} key={b.id} />)}
           <Plane />
-          <Controls />
+          <Controls activeBoxes={activeBoxes} setActiveBoxes={setActiveBoxes} />
         </Physics>
       </Canvas>
       <div
